@@ -1,0 +1,329 @@
+openapi: 3.0.3
+info:
+  title: Macaco Gacha API
+  description: API for adding characters and media in the Macaco Bot gacha system.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: /
+tags:
+- name: character
+  description: Characters available on the gacha system
+- name: media
+  description: Media available on the gacha system
+paths:
+  /character:
+    get:
+      tags:
+      - character
+      summary: List characters by filter
+      description: Multiple status values can be provided with comma separated strings
+      operationId: read_character
+      parameters:
+      - name: status
+        in: query
+        description: Status values that need to be considered for filter
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: available
+          enum:
+          - available
+          - pending
+          - sold
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Character'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Character'
+        "400":
+          description: Invalid status value
+      x-openapi-router-controller: swagger_server.controllers.character_controller
+    put:
+      tags:
+      - character
+      summary: Update an existing character
+      description: Update an existing character by Id
+      operationId: update_character
+      requestBody:
+        description: Update an existent pet in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Character'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Character'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Character'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Pet not found
+        "422":
+          description: Validation exception
+      x-openapi-router-controller: swagger_server.controllers.character_controller
+    post:
+      tags:
+      - character
+      summary: Add a new pet to the store
+      description: Add a new pet to the store
+      operationId: create_character
+      requestBody:
+        description: Create a new pet in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Character'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Character'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Character'
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      x-openapi-router-controller: swagger_server.controllers.character_controller
+    delete:
+      tags:
+      - character
+      summary: Deletes a pet
+      description: delete a pet
+      operationId: delete_character
+      parameters:
+      - name: petId
+        in: query
+        description: Pet id to delete
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "400":
+          description: Invalid pet value
+      x-openapi-router-controller: swagger_server.controllers.character_controller
+  /media:
+    get:
+      tags:
+      - media
+      summary: Place an order for a pet
+      description: Place a new order in the store
+      operationId: get_media
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      x-openapi-router-controller: swagger_server.controllers.media_controller
+    put:
+      tags:
+      - media
+      summary: Place an order for a pet
+      description: Place a new order in the store
+      operationId: update_media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Media'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Media'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Media'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      x-openapi-router-controller: swagger_server.controllers.media_controller
+    post:
+      tags:
+      - media
+      summary: Place an order for a pet
+      description: Place a new order in the store
+      operationId: create_media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Media'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Media'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Media'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      x-openapi-router-controller: swagger_server.controllers.media_controller
+    delete:
+      tags:
+      - media
+      summary: Place an order for a pet
+      description: Place a new order in the store
+      operationId: delete_media
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+      x-openapi-router-controller: swagger_server.controllers.media_controller
+components:
+  schemas:
+    Title:
+      type: object
+      properties:
+        english:
+          type: string
+          example: "Jujutsu Kaisen: Thorny Road at Dawn"
+        native:
+          type: string
+          example: 呪術廻戦 夜明けのいばら道
+        romaji:
+          type: string
+          example: "Jujutsu Kaisen: Yoake no Ibara Michi"
+        userPreferred:
+          type: string
+          example: "Jujutsu Kaisen: Yoake no Ibara Michi"
+      example:
+        native: 呪術廻戦 夜明けのいばら道
+        romaji: "Jujutsu Kaisen: Yoake no Ibara Michi"
+        english: "Jujutsu Kaisen: Thorny Road at Dawn"
+        userPreferred: "Jujutsu Kaisen: Yoake no Ibara Michi"
+    Images:
+      type: object
+      properties:
+        image_url:
+          type: string
+        small_image_url:
+          type: string
+      example:
+        small_image_url: small_image_url
+        image_url: image_url
+    Character:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          example: Satoru Gojo
+        nameKanji:
+          type: string
+          example: 五条悟
+        nicknames:
+          type: array
+          items:
+            type: string
+            example: The Honoured One
+        rarity:
+          type: integer
+          example: 0
+        gender:
+          type: string
+          example: Male
+        images:
+          $ref: '#/components/schemas/Images'
+        media_id:
+          type: array
+          items:
+            type: string
+      example:
+        images:
+          small_image_url: small_image_url
+          image_url: image_url
+        gender: Male
+        nameKanji: 五条悟
+        name: Satoru Gojo
+        media_id:
+        - media_id
+        - media_id
+        id: id
+        nicknames:
+        - The Honoured One
+        - The Honoured One
+        rarity: 0
+    Media:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          $ref: '#/components/schemas/Title'
+      example:
+        id: id
+        title:
+          native: 呪術廻戦 夜明けのいばら道
+          romaji: "Jujutsu Kaisen: Yoake no Ibara Michi"
+          english: "Jujutsu Kaisen: Thorny Road at Dawn"
+          userPreferred: "Jujutsu Kaisen: Yoake no Ibara Michi"
+
